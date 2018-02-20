@@ -21,7 +21,7 @@
 @section('body-class','profile-page')
 
 @section('content')
-<div class="header header-filter" style="background-image: url('/img/examples/city.jpg');"></div>
+<div class="header header-filter" style="background-image: url('{{ asset('img/fondo2.jpg') }}');"></div>
 
 <div class="main main-raised">
 	<div class="profile-content">
@@ -40,15 +40,18 @@
             <div class="description text-center">
                 <p>{{ $product -> long_description }}</p>
             </div>
+			<div class="description text-center">
+                <h4 class="title">$ {{ $product -> price }}</h4>
+            </div>
 			<div class="text-center">
 				<!-- si hay un usuario ingresado puede agregar el producto al carrito -->
 				{{-- @if( auth() -> check() ) si existe una session activa --}}
-				@if( auth() -> user() )
-					<button class="btn btn-primary btn-round" data-toggle="modal" data-target="#addToCart"><i class="material-icons">add_shopping_cart</i> Añadir Al Carrito</button>
-				@else
+				{{--@if( auth() -> user() )--}}
+					<button class="btn btn-danger btn-round" data-toggle="modal" data-target="#addToCart"><i class="material-icons">add_shopping_cart</i> Añadir Al Carrito de Compras</button>
+				{{--@else--}}
 					{{-- se pone parametro ?redirect_to pasando la url actual para redirigir al usuario a la pagina donde estaba --}}
-					<a href="{{ url('/login?redirect_to='.url() -> current() ) }}" class="btn btn-primary btn-round"><i class="material-icons">add_shopping_cart</i> Añadir Al Carrito</a>
-				@endif
+					<!-- <a href="{{ url('/login?redirect_to='.url() -> current() ) }}" class="btn btn-danger btn-round"><i class="material-icons">add_shopping_cart</i> Añadir Al Carrito de Compras</a> -->
+				{{--@endif--}}
 			</div>
 			@if (session('notification'))
 				<div class="alert alert-success">
@@ -107,24 +110,57 @@
     </div>
 </div>
 
-<!-- modal para que pueda escoger la cantidad -->
+<!-- modal para que pueda escoger la cantidad y porciones adiccionales -->
 <div class="modal fade" id="addToCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
 	<div class="modal-content">
 	  <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h4 class="modal-title" id="myModalLabel">Seleccione la cantidad que desea Comprar</h4>
+		<h4 class="modal-title" id="myModalLabel">Opciones para la compra del producto</h4>
 	  </div>
 	  <form class="" action="{{ url('/cart') }}" method="post">
 		  {{ csrf_field() }}
 		  <input type="hidden" name="product_id" value="{{ $product -> id }}">
 		  <div class="modal-body">
-    		  <div class="input-group text-center">
-    			<span class="input-group-addon">
-    				<i class="material-icons">add</i>
-    			</span>
-    			<input class="form-control" type="number" name="quantity" value="1" min="1">
-    		 </div>
+    		  	<div class="input-group text-center">
+			  		<label>Seleccione la cantidad que desea comprar</label>
+				</div>
+				<div class="input-group text-center">
+					<span class="input-group-addon">
+						<i class="material-icons">add</i>
+					</span>
+					<input class="form-control" type="number" name="quantity" id="quantity" value="1" min="1">
+				</div>
+				<!-- explode reemplaza split de string -->
+				{{-- @foreach( explode(" ", $product -> name ) as $wordOut )
+					<div class="input-group text-center">
+						<label for="">			
+							{{ $wordOut }}
+						</label>
+					</div>
+				@endforeach--}}
+				@if( explode(" ", $product -> name )[0] == "Ceviche" || explode(" ", $product -> name )[0] == "ceviche" )
+					@if( count( explode(" ", $product -> name ) ) <= 3 )
+						<div class="input-group text-center">
+							<div class="checkbox">
+								<label>
+									Desea que su ceviche sea Bomba
+									<input type="checkbox" name="bomb" value="bomba" unchecked>
+									por solo $2.000 mas
+								</label>
+							</div>
+						</div>
+						<div class="input-group text-center">
+							<div class="checkbox">
+								<label>
+									Desea acompañarlo de : 
+									<input type="checkbox" name="patacon" value="patacon" unchecked>
+									Patacon por solo $2.000 mas
+								</label>
+							</div>
+						</div>
+					@endif
+				@endif
     	  </div>
     	  <div class="modal-footer">
     		<button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Cancelar</button>

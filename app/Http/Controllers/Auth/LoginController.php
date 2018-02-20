@@ -38,16 +38,16 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    //se reescribe el metodo showLoginForm recibiendo un parametro redirect_to
-    //que sirve para redirigir al usuario luego que inicie sesion a la pagina que etaba viendo
+    // se reescribe el metodo showLoginForm recibiendo un parametro redirect_to
+    // que sirve para redirigir al usuario luego que inicie sesion a la pagina que etaba viendo
     public function showLoginForm( Request $request ) {
+        $notification = "";
         if( $request -> has('redirect_to') ) {
             //se crea una variable de session
             session() -> put( 'redirect_to' , $request -> input('redirect_to' ) );
-            $notification = 'Debes registrarte para poder continuar con la compra';
-            return view('auth.login') -> with( compact('notification') );
+            $notification = 'Debes Ingresar o Registrarte para poder continuar con la compra';
         }
-        return view('auth.login');
+        return view('auth.login') -> with( compact('notification') );
     }
 
     //metodo que nos  devuelve a donde estabamos antes de iniciarsession
@@ -56,7 +56,7 @@ class LoginController extends Controller
         if( session() -> has('redirect_to') ) {
             return session() -> pull( 'redirect_to' );
         }
-        return $this -> redirect_to;
+        return $this -> redirectTo;
     }
 
 }

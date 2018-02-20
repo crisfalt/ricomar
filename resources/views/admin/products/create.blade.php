@@ -5,7 +5,7 @@
 @section('body-class','profile-page')
 
 @section('content')
-<div class="header header-filter" style="background-image: url('https://images.unsplash.com/photo-1423655156442-ccc11daa4e99?crop=entropy&dpr=2&fit=crop&fm=jpg&h=750&ixjsv=2.1.0&ixlib=rb-0.3.5&q=50&w=1450');">
+<div class="header header-filter" style="background-image: url('{{ asset('img/fondo2.jpg') }}');">
 
 </div>
 
@@ -19,7 +19,7 @@
 				<div class="row">
                     <!-- Mostrar los errores capturados por validate -->
                     @if ($errors->any())
-                    <div class="alert alert-danger">
+                    <div class="alert alert-warning">
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -70,9 +70,10 @@
 
 
                     <textarea class="form-control" placeholder="Descripción extensa del producto" rows="5" name="long_description">{{ old('long_description') }}</textarea>
-
-                    <button class="btn btn-primary">Registrar producto</button>
-                    <a href="{{ url('/admin/products') }}" class="btn btn-default">Cancelar</a>
+                    <div class="text-center">
+                        <button class="btn btn-danger">Registrar producto</button>
+                        <a href="{{ url('/admin/products') }}" class="btn btn-default">Cancelar</a>
+                    </div>
                 </form>
 				</div>
 			</div>

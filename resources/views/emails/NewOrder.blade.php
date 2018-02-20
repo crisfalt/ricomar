@@ -20,14 +20,14 @@
     			<strong>E-mail:</strong>
     			{{ $user->email }}
     		</li>
-    		<!-- <li>
+    		<li>
     			<strong>Teléfono:</strong>
     			{{ $user->phone }}
     		</li>
     		<li>
     			<strong>Dirección:</strong>
     			{{ $user->address }}
-    		</li> -->
+    		</li>
     		<li>
     			<strong>Fecha del pedido:</strong>
     			{{ $cart->orderdate }}
@@ -40,6 +40,10 @@
     		<li>
     			{{ $detail->product->name }} x{{ $detail->quantity }}
     			($ {{ $detail->quantity * $detail->product->price }})
+    		</li>
+			<li>
+    			<strong>Observacion y/o Adiccional</strong>
+				{{ $detail -> observation }}
     		</li>
     		@endforeach
     	</ul>

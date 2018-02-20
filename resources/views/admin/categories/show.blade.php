@@ -26,7 +26,7 @@
 @section('body-class','profile-page')
 
 @section('content')
-<div class="header header-filter" style="background-image: url('https://images.unsplash.com/photo-1423655156442-ccc11daa4e99?crop=entropy&dpr=2&fit=crop&fm=jpg&h=750&ixjsv=2.1.0&ixlib=rb-0.3.5&q=50&w=1450');">
+<div class="header header-filter" style="background-image: url('{{ asset('img/fondo2.jpg') }}');">
 
 </div>
 
@@ -56,11 +56,15 @@
                     </div>
 					<div class="row text-center">
 						<!-- Aqui pone la imagen que sube -->
-						<img src="/images/categories/{{ $category -> image }}" class="img quarter" id="image">
+						@if( $category -> image != "" )
+							<img src="/images/categories/{{ $category -> image }}" class="img quarter" id="image">
+						@else
+							<img src="/images/categories/default2.jpg" class="img quarter" id="image">
+						@endif	
 					</div>
 					<br>
                     <div class="text-center">
-                        <a href="{{ url('/admin/categories') }}" class="btn btn-primary"><i class="material-icons">chevron_left</i> Volver</a>
+                        <a href="{{ url('/admin/categories') }}" class="btn btn-danger"><i class="material-icons">chevron_left</i> Volver</a>
                     </div>
 				</div>
 			</div>

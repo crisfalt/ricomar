@@ -10,7 +10,7 @@
 				<div class="card card-signup">
 					<form class="form" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
-                        <div class="header header-primary text-center">
+                        <div class="header header-danger text-center">
 							<h4>Inicio de Sesión</h4>
 							<!-- <div class="social-line">
 								<a href="#pablo" class="btn btn-simple btn-just-icon">
@@ -26,7 +26,7 @@
 						</div>
 						{{-- mostrar cuando hayan errores --}}
 						@if ($errors->any())
-						<div class="alert alert-danger">
+						<div class="alert alert-warning">
 							<ul>
 								@foreach ($errors->all() as $error)
 									<li>{{ $error }}</li>
@@ -36,10 +36,10 @@
 						@endif
 						{{-- mostrar cuando llegue una notificacion --}}
 						@if ($notification != "" )
-							<div class="alert alert-danger">
+							<div class="alert alert-warning">
 						    	<div class="container-fluid">
 									<div class="alert-icon">
-										<i class="material-icons">check</i>
+										<i class="material-icons">warning</i>
 									</div>
 									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 										<span aria-hidden="true"><i class="material-icons">clear</i></span>
@@ -75,7 +75,7 @@
 							</div>
 						</div>
 						<div class="footer text-center">
-							<button type="submit" class="btn btn-simple btn-primary btn-lg">Ingresar</button>
+							<button type="submit" class="btn btn-simple btn-danger btn-lg">Ingresar</button>
 						</div>
                         <!-- <a class="btn btn-link" href="{{ route('password.request') }}">
                             Forgot Your Password?

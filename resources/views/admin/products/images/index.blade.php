@@ -26,7 +26,7 @@
 @section('body-class','profile-page')
 
 @section('content')
-<div class="header header-filter" style="background-image: url('https://images.unsplash.com/photo-1423655156442-ccc11daa4e99?crop=entropy&dpr=2&fit=crop&fm=jpg&h=750&ixjsv=2.1.0&ixlib=rb-0.3.5&q=50&w=1450');">
+<div class="header header-filter" style="background-image: url('{{ asset('img/fondo2.jpg') }}');">
 
 </div>
 
@@ -35,7 +35,7 @@
     	<div class="section text-center">
             <h2 class="title">Imágenes de Producto "{{ $product -> name }}"</h2>
 			@if ($errors->any())
-			<div class="alert alert-danger text-left">
+			<div class="alert alert-warning text-left">
 				<ul>
 					@foreach ($errors->all() as $error)
 						<li>{{ $error }}</li>
@@ -56,7 +56,7 @@
 					<img src="" alt="..." class="img quarter" id="image">
 				</div>
 				<!-- <input type="hidden" id="txtPhoto" name="txtPhoto" value=""> -->
-				<button type="submit" class="btn btn-primary btn-round">Subir Nueva Imagen</button>
+				<button type="submit" class="btn btn-danger btn-round">Subir Nueva Imagen</button>
 				<a href="{{ url('/admin/products') }}" class="btn btn-default btn-round">Volver al listado de productos</a>
 			</form>
 				<!-- </div>

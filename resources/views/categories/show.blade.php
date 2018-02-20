@@ -82,7 +82,7 @@
 @section('body-class','profile-page')
 
 @section('content')
-<div class="header header-filter" style="background-image: url('/img/examples/city.jpg');"></div>
+<div class="header header-filter" style="background-image: url('{{ asset('img/fondo2.jpg') }}');"></div>
 
 <div class="main main-raised">
 	<div class="profile-content">
@@ -123,11 +123,14 @@
     					<div class="col-md-4 col-xs-12 text-center">
     	                    <div class="team-player">
                                 <!-- featured_image_url , path creada en el modelo product::getFeaturedImageUrlAttribute -->
-    	                        <img src="{{ $product -> featured_image_url }}" alt="Thumbnail Image" class="img-raised rounded">
+    	                        <a href="{{ url('/products/'.$product -> id) }}"><img src="{{ $product -> featured_image_url }}" alt="Thumbnail Image" class="img-raised rounded"></a>
     	                        <h4 class="title">
                                     <a href="{{ url('/products/'.$product -> id) }}">{{ $product -> name }} </a><br />
     							</h4>
     	                        <p class="description">{{ $product->description }}</p>
+								<h4 class="title">
+                                    $ {{ $product -> price }}
+    							</h4>
     	                    </div>
     	                </div>
                         @endforeach

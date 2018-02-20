@@ -67,7 +67,7 @@
 
         .cout-size {
             height: 200px;
-			width: 300px;
+		    width: 250px;
         }
 
         .rounded {
@@ -116,13 +116,13 @@
 	                    <div class="team-player">
                             <!-- featured_image_url , path creada en el modelo product::getFeaturedImageUrlAttribute -->
                             @if( $category -> image != "" )
-	                           <img src="/images/categories/{{ $category -> image }}" alt="Thumbnail Image" class="img-rounded cout-size">
+                                <a href="{{ url('/categories/'.$category -> id) }}"><img src="/images/categories/{{ $category -> image }}" alt="Thumbnail Image" class="img-rounded cout-size"></a>
                             @else
-                                <img src="/images/categories/default2.jpg" alt="Thumbnail Image" class="img-rounded cout-size">
+                                <a href="{{ url('/categories/'.$category -> id) }}"><img src="/images/categories/default2.jpg" alt="Thumbnail Image" class="img-rounded cout-size"></a>
                             @endif
 	                        <h4 class="title">
                                 <a href="{{ url('/categories/'.$category -> id) }}">{{ $category -> name }} </a><br />
-							</h4>
+							           </h4>
 	                        <p class="description">{{ $category->description }}</p>
 	                    </div>
 	                </div>
@@ -139,79 +139,77 @@
                 </div>
             </div>
 
-			<div class="features">
-				<div class="row">
-                    <div class="col-md-4">
-						<div class="info">
-							<div class="icon icon-primary">
-								<i class="material-icons">chat</i>
-							</div>
-							<h4 class="info-title">Atendemos tus dudas</h4>
-							<p>Atendemos rápidamente cualquier consulta que tengas vía chat. No estás sólo, sino que siempre estamos atentos a tus inquietudes.</p>
-						</div>
-                    </div>
-                    <div class="col-md-4">
-						<div class="info">
-							<div class="icon icon-success">
-								<i class="material-icons">verified_user</i>
-							</div>
-							<h4 class="info-title">Pago seguro</h4>
-							<p>Todo pedido que realices será confirmado a través de una llamada. Si no confías en los pagos en línea puedes pagar contra entrega el valor acordado.</p>
-						</div>
-                    </div>
-                    <div class="col-md-4">
-						<div class="info">
-							<div class="icon icon-danger">
-								<i class="material-icons">fingerprint</i>
-							</div>
-							<h4 class="info-title">Información privada</h4>
-							<p>Los pedidos que realices sólo los conocerás tú a través de tu panel de usuario. Nadie más tiene acceso a esta información.</p>
-						</div>
-                    </div>
-                </div>
-			</div>
+      			<div class="features">
+      				<div class="row">
+                          <div class="col-md-4">
+      						<div class="info">
+      							<div class="icon icon-primary">
+      								<i class="material-icons">chat</i>
+      							</div>
+      							<h4 class="info-title">Atendemos tus dudas</h4>
+      							<p>Atendemos rápidamente cualquier consulta que tengas vía chat. No estás sólo, sino que siempre estamos atentos a tus inquietudes.</p>
+      						</div>
+                          </div>
+                          <div class="col-md-4">
+      						<div class="info">
+      							<div class="icon icon-success">
+      								<i class="material-icons">verified_user</i>
+      							</div>
+      							<h4 class="info-title">Pago seguro</h4>
+      							<p>Todo pedido que realices será confirmado a través de una llamada. Si no confías en los pagos en línea puedes pagar contra entrega el valor acordado.</p>
+      						</div>
+                          </div>
+                          <div class="col-md-4">
+      						<div class="info">
+      							<div class="icon icon-danger">
+      								<i class="material-icons">fingerprint</i>
+      							</div>
+      							<h4 class="info-title">Información privada</h4>
+      							<p>Los pedidos que realices sólo los conocerás tú a través de tu panel de usuario. Nadie más tiene acceso a esta información.</p>
+      						</div>
+                          </div>
+                      </div>
+      			</div>
         </div>
-        <!-- si no esta logueado que lo deje inscribir -->
-        @if( !(auth() -> check() ) )
-            <div class="section landing-section">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <h2 class="text-center title">¿Aún no te has registrado?</h2>
-                        <h4 class="text-center description">Regístrate ingresando tus datos básicos, y podrás realizar tus pedidos a través de nuestro carrito de compras. Si aún no te decides, de todas formas, con tu cuenta de usuario podrás hacer todas tus consultas sin compromiso.</h4>
-                        <form class="contact-form" action="{{ url( '/register' ) }}" method="get">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group label-floating">
-                                        <label class="control-label">Nombre</label>
-                                        <input type="text" class="form-control" name="name" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group label-floating">
-                                        <label class="control-label">Correo electrónico</label>
-                                        <input type="email" class="form-control" name="email" required>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- <div class="form-group label-floating">
-                                <label class="control-label">Tu mensaje</label>
-                                <textarea class="form-control" rows="4"></textarea>
-                            </div> -->
-
-                            <div class="row">
-                                <div class="col-md-4 col-md-offset-4 text-center">
-                                    <button class="btn btn-primary btn-raised">
-                                        Iniciar Registro
-                                    </button>
-                                </div>
+    	<div class="section landing-section">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <h2 class="text-center title">¿Aún no te has registrado?</h2>
+					<h4 class="text-center description">Regístrate ingresando tus datos básicos, y podrás realizar tus pedidos a través de nuestro carrito de compras. Si aún no te decides, de todas formas, con tu cuenta de usuario podrás hacer todas tus consultas sin compromiso.</h4>
+                    <form class="contact-form" action="{{ url( '/register' ) }}" method="get">
+                        <div class="row">
+                            <div class="col-md-6">
+								<div class="form-group label-floating">
+									<label class="control-label">Nombre</label>
+									<input type="text" class="form-control" name="name" required>
+								</div>
                             </div>
-                        </form>
-                    </div>
+                            <div class="col-md-6">
+								<div class="form-group label-floating">
+									<label class="control-label">Correo electrónico</label>
+									<input type="email" class="form-control" name="email" required>
+								</div>
+                            </div>
+                        </div>
+
+						<!-- <div class="form-group label-floating">
+							<label class="control-label">Tu mensaje</label>
+							<textarea class="form-control" rows="4"></textarea>
+						</div> -->
+
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-4 text-center">
+                                <button class="btn btn-primary btn-raised">
+									Iniciar Registro
+								</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-
             </div>
-        @endif
+
+        </div>
     </div>
 
 </div>
@@ -219,10 +217,32 @@
 <!-- incluir el footer desde una vista en la carpeta includes -->
 @include('includes.footer')
 @endsection
-
 @section('scripts')
-    <script type="text/javascript" src="{{ asset('/js/typeahead.bundle.min.js') }}"></script>
-    <script type="text/javascript">
+    <script src="{{ asset('/js/typeahead.bundle.min.js') }}"></script>
+    <script>
+        $(function () {
+            // 
+            var products = new Bloodhound({
+              datumTokenizer: Bloodhound.tokenizers.whitespace,
+              queryTokenizer: Bloodhound.tokenizers.whitespace,
+              prefetch: '{{ url("/products/json") }}'
+            });            
+
+            // inicializar typeahead sobre nuestro input de búsqueda
+            $('#search').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 1
+            }, {
+                name: 'products',
+                source: products
+            });
+        });
+    </script>
+@endsection
+<!-- @section('scripts')
+    <script src="{{ asset('/js/typeahead.bundle.min.js') }}"></script>
+    <script>
         $(function() {
 
             // constructs the suggestion engine
@@ -246,3 +266,4 @@
         });
     </script>
 @endsection
+ -->

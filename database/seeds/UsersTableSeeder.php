@@ -27,5 +27,12 @@ class UsersTableSeeder extends Seeder
             'username' => 'kevin',
             'admin' => true
         ]);
+        User::create([
+        	'name' => 'invitado',
+            'email' => 'invitado@gmail.com',
+            'password' => bcrypt('123123'),
+            'username' => 'invitado',
+            'admin' => true
+        ]);
     }
 }

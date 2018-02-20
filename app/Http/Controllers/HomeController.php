@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -24,13 +24,28 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $cart = auth() -> user() -> cart;
         $totalTemp = 0;
-        //calcular el valor total que lleva el carrito hasta ahora
-        foreach ($cart -> details as $detail) {
-            # code...
-            $totalTemp = $totalTemp + ( $detail -> product -> price * $detail -> quantity);
+        $notification= "";
+        if( auth() -> check() ) {
+            $cart = auth() -> user() -> cart;
+            foreach ($cart -> details as $detail) {
+                # code...
+                $totalTemp = $totalTemp + ( $detail -> product -> price * $detail -> quantity);
+            }
         }
-        return view('home') -> with( compact('totalTemp') );
+        else {
+            if( ( \Cache::has('detailsTemp') ) ) {
+                $detailsTemp = \Cache::get('detailsTemp');
+                foreach( $detailsTemp as $detail ) {
+                    $totalTemp = $totalTemp + ( $detail -> product -> price * $detail -> quantity);
+                }
+            }
+            else {
+                $notification = "Si no confirmas en 20 minutos tu carrito se elimina , debes volver a seleccionar los productos y confirmar tu compra";
+            }
+        }
+        //calcular el valor total que lleva el carrito hasta ahora
+        
+        return view('home') -> with( compact('notification') );
     }
 }

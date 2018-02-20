@@ -5,7 +5,7 @@
 @section('body-class','profile-page')
 
 @section('content')
-<div class="header header-filter" style="background-image: url('https://images.unsplash.com/photo-1423655156442-ccc11daa4e99?crop=entropy&dpr=2&fit=crop&fm=jpg&h=750&ixjsv=2.1.0&ixlib=rb-0.3.5&q=50&w=1450');">
+<div class="header header-filter" style="background-image: url('{{ asset('img/fondo2.jpg') }}');">
 
 </div>
 
@@ -30,11 +30,13 @@
 							</div>
 						</div>
 		            @endif
-                    <a href="{{ url('/admin/products/create') }}" class="btn btn-primary btn-round">Nuevo producto</a>
+                    <a href="{{ url('/admin/products/create') }}" class="btn btn-danger btn-round">Nuevo producto</a>
                     <!-- <br> -->
                     <hr>
 
-                    <table class="table">
+
+
+                    <table class="table" id="tableProducts">
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
@@ -90,4 +92,74 @@
 
 <!-- incluir el footer desde una vista en la carpeta includes -->
 @include('includes.footer')
+@endsection
+
+@section('scripts')
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/js/foundation.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.foundation.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.1/js/responsive.foundation.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#tableProducts').DataTable({
+                "language": {
+
+                    "emptyTable": "No hay categorias , click en el boton <b>Nueva Categoria</b> para agregar uno nuevo",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "previous": "Anterior",
+                        "next": "Siguiente",
+                    },
+                    "search": "Buscar: ",
+                    "info": "Mostrando del _START_ al _END_, de un total de _TOTAL_ entradas",
+                },
+                "dom": 'Bfrtip',
+                        "lengthChange": "false",
+                        "lengthMenu": [
+                            [10, 25, 50, -1],
+                            ['10 filas', '25 filas', '50 filas', 'Mostrar Todo']
+                        ],
+                        "buttons": [
+                            {
+                                "extend": "pageLength",
+                                "text": "Mostrar Mas",
+                                "orientation": 'landscape',
+                                "pageSize": 'LEGAL'
+                                //"className": "red"
+                            },
+                            {
+                                "extend": "print",
+                                "text": "<i class='fa fa-print'></i>",
+                                "titleAttr": 'Imprimir',
+                                "orientation": 'landscape',
+                                "pageSize": 'LEGAL'
+                                //"className": "red"
+                            },
+                            {
+                                "extend": 'excelHtml5',
+                                "text": '<i class="fa fa-file-excel-o"></i>',
+                                "titleAttr": 'Convertir Excel',
+                                //"extend": "excel",
+                                //"text": "Convertir Excel",
+                                "orientation": 'landscape',
+                                "pageSize": 'LEGAL'
+                            },
+                            {
+                                "extend": 'pdfHtml5',
+                                "text": '<i class="fa fa-file-pdf-o"></i>',
+                                "titleAttr": 'Convertir PDF',
+                                "orientation": 'landscape',
+                                "pageSize": 'LEGAL'
+                                //"extend": "pdf",
+                                //"text": "Convertir Pdf"
+                                //"className": "red"
+                            }
+                        ]
+            });
+        } );
+    </script>
 @endsection

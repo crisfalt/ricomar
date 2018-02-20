@@ -82,7 +82,7 @@
 @section('body-class','profile-page')
 
 @section('content')
-<div class="header header-filter" style="background-image: url('/img/examples/city.jpg');"></div>
+<div class="header header-filter" style="background-image: url('{{ asset('img/fondo2.jpg') }}');"></div>
 
 <div class="main main-raised">
 	<div class="profile-content">
