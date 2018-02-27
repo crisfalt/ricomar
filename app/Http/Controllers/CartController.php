@@ -25,12 +25,15 @@ class CartController extends Controller
                 $cartActual -> orderdate = Carbon::now(); //obtener fecha actual
                 $cartActual -> total = $request -> input('total');
                 $cartActual -> save(); //atualizo el carrito
-                $notification = 'Tu Pedido se ha registrado Exitosamente. Te contactaremos via Email!';
+                $notification = 'Tu Pedido se ha registrado Exitosamente. Te contactaremos via Telefonicamente!';
+                $admins = User::where('admin', true)->get(); //busco todos los administradores para q les llegue correo
+                //clase neworder de maiable recibe usuario y carrito se le pasa por parametro
+                Mail::to($admins)->send(new NewOrder($client, $cartActual,''));
             }
         }
         else {
-            if( ( \Cache::has('detailsTemp') ) ) { //si hay detalles temporales en la cache
-                $detallesTemporales = \Cache::get('detailsTemp');
+            if( ($request->session()->has('detailsTemp') )  ) { //si hay detalles temporales en la cache
+                $detallesTemporales = $request->session()->get('detailsTemp');
                 if( count( $detallesTemporales ) > 0 ) { // si en los detalles temporales hay mas de 0 producto
                     //usuario temporal
                     $client = new User();
@@ -42,7 +45,9 @@ class CartController extends Controller
                     $lastCart = Cart::all() -> last();
                     $cartActual = new Cart();
                     $cartActual -> status = 'Pending';
-                    $cartActual -> id = ( ( $lastCart -> id ) + 1 );
+                    if( $lastCart != null ) {
+                        $cartActual -> id = ( ( $lastCart -> id ) + 1 );   
+                    }
                     $cartActual -> orderdate = Carbon::now(); //obtener fecha actual
                     $cartActual -> total = $request -> input('total');
                     $cartActual -> user_id = 3;
@@ -52,16 +57,16 @@ class CartController extends Controller
                         $detalle -> cart_id = $cartActual -> id;
                         $detalle -> save();
                     }
-                    \Cache::forget('detailsTemp');
+                    $request->session()->forget('detailsTemp');
                     $arrayToSave = array();
-                    \Cache::put('detailsTemp', $arrayToSave , 20);
-                    $notification = 'Tu Pedido se ha registrado Exitosamente. Te contactaremos via Email!';
+                    $request->session()->put('detailsTemp', $arrayToSave );
+                    $notification = 'Tu Pedido se ha registrado Exitosamente. Te contactaremos via Telefonicamente!';
+                    $admins = User::where('admin', true)->get(); //busco todos los administradores para q les llegue correo
+                    //clase neworder de maiable recibe usuario y carrito se le pasa por parametro
+                    Mail::to($admins)->send(new NewOrder($client, $cartActual,$request -> input('barrio')));
                 }
             }
         }
-        $admins = User::where('admin', true)->get(); //busco todos los administradores para q les llegue correo
-        //clase neworder de maiable recibe usuario y carrito se le pasa por parametro
-        Mail::to($admins)->send(new NewOrder($client, $cartActual));
         return back() -> with( compact('notification') );
     }
 }

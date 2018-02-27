@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('description',250);
+            // $table->string('description',250);
             $table->text('long_description')->nullable();
             $table->float('price');
             //inicio foreign key

@@ -77,21 +77,21 @@
 			<p>Se cobra un valor adiccional de $1000 que corresponde al embalaje del producto</p>
 			<hr>
 			<?php
-				$cartDetails;
-				$countProducts = 0;
-				if( auth() ->check() ) {
-					$cartDetails = auth() -> user() -> cart -> details;
-					$countProducts= $cartDetails -> count();
-				}
-				else {
-					if( ( \Cache::has('detailsTemp') ) ) {
-						$cartDetails = \Cache::get('detailsTemp');
-						$countProducts = count($cartDetails);
-					}
-					else {
-						$cartDetails = array();
-					}
-				}
+				// $cartDetails;
+				// $countProducts = 0;
+				// if( auth() ->check() ) {
+				// 	$cartDetails = auth() -> user() -> cart -> details;
+				// 	$countProducts= $cartDetails -> count();
+				// }
+				// else {
+				// 	if( ( \Cache::has('detailsTemp') ) ) {
+				// 		$cartDetails = \Cache::get('detailsTemp');
+				// 		$countProducts = count($cartDetails);
+				// 	}
+				// 	else {
+				// 		$cartDetails = array();
+				// 	}
+				// }
 			?>
 			<p>Tu carrito de compras tiene {{ $countProducts }} productos</p>
 			<div class="team">
@@ -126,6 +126,12 @@
 											<?php
 												$addPlatos = explode(";",$detail->observation);
 												$countAddicionales = count( $addPlatos );
+												$totalAddPlatos = 0; //valor total de los adiccionales
+												// echo $detail->observation."<br>";
+												// foreach( $addPlatos as $frase ) {
+												// 	echo $frase."<br>";
+												// }
+												// echo $countAddicionales;
 											?>
 											<a href="{{ url('/products/'.$detail -> product -> id) }}" target="_blank">{{ $detail -> product->name . " ( Adiccional : " . $detail -> observation .")" }}</a>	
 										@else
@@ -137,11 +143,18 @@
 										$totalQuantity += $detail -> quantity;
 									?>
 									@if( $countAddicionales > 0 )
-										<td class="text-right">$ {{ ( $detail -> product->price ) + ( 2000 * $countAddicionales ) }}</td>
+										@foreach( $addPlatos as $adicional )
+											@if( $adicional == "bomba" || $adicional == "patacon" )
+												<?php
+													$totalAddPlatos += 2000;
+												?>
+											@endif
+										@endforeach
+										<td class="text-right">$ {{ ( $detail -> product->price ) + ( $totalAddPlatos ) }}</td>
 										<?php
-											$totalPay += ( $detail -> product->price + ( 2000 * $countAddicionales ) ) * ( $detail -> quantity );
+											$totalPay += ( $detail -> product->price + $totalAddPlatos ) * ( $detail -> quantity );
 										?>
-										<td class="text-right">$ {{ ( $detail -> product->price + ( 2000 * $countAddicionales ) ) * ( $detail -> quantity )  }}</td>
+										<td class="text-right">$ {{ ( $detail -> product->price + ( $totalAddPlatos ) ) * ( $detail -> quantity )  }}</td>
 									@else
 										<td class="text-right">$ {{ $detail -> product->price }}</td>
 										<?php
@@ -150,20 +163,23 @@
 										<td class="text-right">$ {{ ( $detail -> product->price ) * ( $detail -> quantity ) }}</td>
 									@endif
 									<td class="td-actions text-right">
-										<form method="post" action="{{ url('/cart') }}">
+										<form method="post" action="{{ url('/cart') }}" class="delete">
 											{{ csrf_field() }}
 											{{ method_field('DELETE') }}
-											@if( auth() -> check() )
-												<input type="hidden" name="cart_detail_id" value="{{ $detail -> id }}">
-											@else
-											<input type="hidden" name="cart_detail_id" value="{{ $key }}">
-											@endif	
 											<a href="{{ url('/products/'.$detail -> product->id) }}" target="_blank" rel="tooltip" title="Ver producto" class="btn btn-info btn-simple btn-xs" target="_blank">
 												<i class="fa fa-info"></i>
 											</a>
-											<button type="submit" rel="tooltip" title="Eliminar" class="btn btn-danger btn-simple btn-xs">
+											@if( auth() -> check() )
+												<input type="hidden" name="cart_detail_id" value="{{ $detail -> id }}">
+												<a class='btn btn-danger btn-simple btn-xs' rel="tooltip" title="Eliminar" onclick="Delete({{ $detail -> id }})"><i class='fa fa-trash'></i> </a>
+											@else
+												<a class='btn btn-danger btn-simple btn-xs' rel="tooltip" title="Eliminar" onclick="Delete({{ $key }})"><i class='fa fa-trash'></i> </a>
+												<input type="hidden" name="cart_detail_id" value="{{ $key }}">
+											@endif	
+												
+											<!-- <button type="submit" rel="tooltip" title="Eliminar" class="btn btn-danger btn-simple btn-xs">
 												<i class="fa fa-times"></i>
-											</button>
+											</button> -->
 										</form>
 									</td>
 								</tr>
@@ -184,6 +200,9 @@
 										<td class="text-right">$ {{ $totalPay }}</td>
 									</tr>
 								@endif
+								<?php
+									$totalQuantity = 0;
+								?>
 							</tbody>
 						</table>
 					</div>
@@ -231,7 +250,7 @@
 				<span class="input-group-addon">
 					<i class="material-icons">face</i>
 				</span>
-				<input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Nombre Quien Recibe el Domicilio" required autofocus>
+				<input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Nombre Quien Recibe el Domicilio" required>
 			</div>
 
 			<div class="input-group">
@@ -254,6 +273,12 @@
 				</span>
 				<input id="address" type="text" class="form-control" name="address" value="{{ old('address') }}" placeholder="Direccion de Entrega" required>
 			</div>
+			<div class="input-group">
+				<span class="input-group-addon">
+					<i class="material-icons">location_on</i>
+				</span>
+				<input id="barrio" type="text" class="form-control" name="barrio" value="{{ old('barrio') }}" placeholder="Barrio" required>
+			</div>
     	  </div>
     	  <div class="modal-footer">
     		<button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Cancelar</button>
@@ -266,4 +291,61 @@
 
 <!-- incluir el footer desde una vista en la carpeta includes -->
 @include('includes.footer')
+@endsection
+
+@section('scripts')
+	<script>
+		function Delete() {
+			$.confirm({
+				theme: 'supervan',
+				title: 'Eliminar Plato',
+				content: 'Seguro(a) que deseas eliminar el Plato. <br> Click Aceptar or Cancelar',
+				icon: 'fa fa-question-circle',
+				animation: 'scale',
+				animationBounce: 2.5,
+				closeAnimation: 'scale',
+				opacity: 0.5,
+				buttons: {
+					'confirm': {
+						text: 'Aceptar',
+						btnClass: 'btn-blue',
+						action: function () {
+							$.confirm({
+								theme: 'supervan',
+								title: 'Estas Seguro ?',
+								content: 'Una vez eliminado debes volver a elegir el plato',
+								icon: 'fa fa-warning',
+								animation: 'scale',
+								animationBounce: 2.5,
+								closeAnimation: 'zoom',
+								buttons: {
+									confirm: {
+										text: 'Si, Estoy Seguro!',
+										btnClass: 'btn-orange',
+										action: function () {
+											$('.delete').submit();
+										}
+									},
+									cancel: {
+										text: 'No, Cancelar',
+										//$.alert('you clicked on <strong>cancel</strong>');
+									}
+								}
+							});
+						}
+					},
+					cancel: {
+						text: 'Cancelar',
+						//$.alert('you clicked on <strong>cancel</strong>');
+					},
+					//moreButtons: {
+					//    text: 'something else',
+					//    action: function () {
+					//        $.alert('you clicked on <strong>something else</strong>');
+					//    }
+					//},
+				}
+			});
+		}
+	</script>
 @endsection

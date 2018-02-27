@@ -48,14 +48,14 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-6">
+                        <!-- <div class="col-sm-6">
                              <div class="form-group label-floating">
                                 <label class="control-label">Descripción corta</label>
                                 <input type="text" class="form-control" name="description" value="{{ old('description', $product->description) }}">
                             </div>
-                        </div>
+                        </div> -->
 
-						<div class="col-sm-6">
+						<div class="col-sm-4">
                             <div class="form-group label-floating">
                                 <label class="control-label">Categoría del producto</label>
                                 <select class="form-control" name="category_id">
@@ -66,11 +66,14 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" placeholder="Descripción extensa del producto" rows="5" name="long_description">{{ old('long_description',$product->long_description) }}</textarea>
+                        </div>
                     </div>
 
 
 
-                    <textarea class="form-control" placeholder="Descripción extensa del producto" rows="5" name="long_description">{{ old('long_description', $product->long_description) }}</textarea>
+                    <!-- <textarea class="form-control" placeholder="Descripción extensa del producto" rows="5" name="long_description">{{ old('long_description', $product->long_description) }}</textarea> -->
                     <div class="text-center">
                         <button class="btn btn-danger">Actualizar Producto</button>
                         <a href="{{ url('/admin/products') }}" class="btn btn-default">Cancelar</a>

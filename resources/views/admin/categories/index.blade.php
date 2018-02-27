@@ -72,7 +72,7 @@
 									@endif
 								</td>
                                 <td class="td-actions text-right">
-                                    <form method="post" action="{{ url('/admin/categories/'.$categorie->id) }}">
+                                    <form method="post" action="{{ url('/admin/categories/'.$categorie->id) }}" class="delete">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
 
@@ -85,9 +85,10 @@
                                         <!-- <a href="{{ url('/admin/categories/'.$categorie->id.'/images') }}" rel="tooltip" title="Imágenes de la Categoria" class="btn btn-warning btn-simple btn-xs">
                                             <i class="fa fa-image"></i>
                                         </a> -->
-                                        <button type="submit" rel="tooltip" title="Eliminar Categoria" class="btn btn-danger btn-simple btn-xs">
+                                        <a class='btn btn-danger btn-simple btn-xs' rel="tooltip" title="Eliminar" onclick="Delete('{{ $categorie -> name }}')"><i class='fa fa-times'></i> </a>
+                                        <!-- <button type="submit" rel="tooltip" title="Eliminar Categoria" class="btn btn-danger btn-simple btn-xs">
                                             <i class="fa fa-times"></i>
-                                        </button>
+                                        </button> -->
                                     </form>
                                 </td>
                             </tr>
@@ -106,4 +107,55 @@
 
 <!-- incluir el footer desde una vista en la carpeta includes -->
 @include('includes.footer')
+@endsection
+
+@section('scripts')
+<script>
+        function Delete( nameProduct ) {
+			$.confirm({
+				theme: 'supervan',
+				title: 'Eliminar Plato',
+				content: 'Seguro(a) que deseas eliminar la categoria ' + nameProduct + '. <br> Click Aceptar or Cancelar',
+				icon: 'fa fa-question-circle',
+				animation: 'scale',
+				animationBounce: 2.5,
+				closeAnimation: 'scale',
+				opacity: 0.5,
+				buttons: {
+					'confirm': {
+						text: 'Aceptar',
+						btnClass: 'btn-blue',
+						action: function () {
+							$.confirm({
+								theme: 'supervan',
+								title: 'Estas Seguro ?',
+								content: 'Una vez eliminada la categoria los platos bajo esta quedaran como General',
+								icon: 'fa fa-warning',
+								animation: 'scale',
+								animationBounce: 2.5,
+								closeAnimation: 'zoom',
+								buttons: {
+									confirm: {
+										text: 'Si, Estoy Seguro!',
+										btnClass: 'btn-orange',
+										action: function () {
+											$('.delete').submit();
+										}
+									},
+									cancel: {
+										text: 'No, Cancelar',
+										//$.alert('you clicked on <strong>cancel</strong>');
+									}
+								}
+							});
+						}
+					},
+					cancel: {
+						text: 'Cancelar',
+						//$.alert('you clicked on <strong>cancel</strong>');
+					},
+				}
+			});
+		}
+    </script>
 @endsection

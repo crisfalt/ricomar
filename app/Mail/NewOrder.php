@@ -17,16 +17,18 @@ class NewOrder extends Mailable
     //variables objetos necesarias para crear el correo
     public $user;
     public $cart;
+    public $barrio;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct( User $user, Cart $cart )
+    public function __construct( User $user, Cart $cart , $barrio )
     {
         //
         $this->user = $user;
         $this->cart = $cart;
+        $this->barrio = $barrio;
     }
 
     /**

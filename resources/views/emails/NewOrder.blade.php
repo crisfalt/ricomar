@@ -28,6 +28,12 @@
     			<strong>Dirección:</strong>
     			{{ $user->address }}
     		</li>
+			@if( !( auth() -> check() ) )
+				<li>
+					<strong>Barrio:</strong>
+					{{ $barrio }}
+				</li>
+			@endif
     		<li>
     			<strong>Fecha del pedido:</strong>
     			{{ $cart->orderdate }}

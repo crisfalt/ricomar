@@ -15,10 +15,38 @@
 			border-radius: 50%;
 			background-size:cover;
 		}
+
+		.cout-size {
+            height: 160px;
+			width: 300px;
+        }
+
+		.font-description {
+            font-size : 1.2em;
+        }
+
+		*{
+            margin:0;
+        }
+
+        #fixed {
+            
+            left: calc( 100% - 54px );
+            top: cacl(100% - 10px );;
+            color : red;
+            font-size: 30px;
+            position: fixed;
+
+        }
+
 	</style>
 @endsection
 
 @section('body-class','profile-page')
+
+@section('cartFixed')
+<a href="{{ url('/home') }}" class=""><i id="fixed" class="material-icons">shopping_cart</i></a>
+@endsection
 
 @section('content')
 <div class="header header-filter" style="background-image: url('{{ asset('img/fondo2.jpg') }}');"></div>
@@ -29,7 +57,7 @@
             <div class="row">
                 <div class="profile">
                     <div class="avatar">
-                        <img src="{{ $product -> featured_image_url }}" alt="No se encontro" class="img-raised rounded">
+                        <img src="{{ $product -> featured_image_url }}" alt="No se encontro" class="img cout-size">
                     </div>
                     <div class="name">
                         <h3 class="title">{{ $product -> name }}</h3>
@@ -38,7 +66,7 @@
                 </div>
             </div>
             <div class="description text-center">
-                <p>{{ $product -> long_description }}</p>
+                <p class="font-description">{{ $product -> long_description }}</p>
             </div>
 			<div class="description text-center">
                 <h4 class="title">$ {{ $product -> price }}</h4>
@@ -130,6 +158,15 @@
 						<i class="material-icons">add</i>
 					</span>
 					<input class="form-control" type="number" name="quantity" id="quantity" value="1" min="1">
+				</div>
+				<div class="input-group text-center">
+			  		<label>Observacion para el plato</label>
+				</div>
+				<div class="input-group text-center">
+					<span class="input-group-addon">
+						<i class="material-icons">visibility</i>
+					</span>
+					<input class="form-control" type="text" name="observation" id="quantity" placeholder="Algo mas ? Sin sal,sin cebolla,paella dividida">
 				</div>
 				<!-- explode reemplaza split de string -->
 				{{-- @foreach( explode(" ", $product -> name ) as $wordOut )

@@ -2,6 +2,19 @@
 
 @section('title','Listado de Productos')
 
+@section('styles')
+
+<!-- <link href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.16/css/dataTables.foundation.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.foundation.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.foundation.min.css" rel="stylesheet" /> -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css" rel="stylesheet" /> -->
+<link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+
+
+@endsection
+
 @section('body-class','profile-page')
 
 @section('content')
@@ -36,15 +49,15 @@
 
 
 
-                    <table class="table" id="tableProducts">
+                    <table class="table" cellspacing="0" id="tableProducts">
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
                                 <th class="col-md-2 text-center">Nombre</th>
-                                <th class="col-md-5 text-center">Descripción</th>
-                                <th class="text-center">Categoría</th>
-                                <th class="text-right">Precio</th>
-                                <th class="text-right">Opciones</th>
+                                <th class="col-md-4 text-center">Descripción</th>
+                                <th class="col-md-2 text-center">Categoría</th>
+                                <th class="col-md-1 text-right">Precio</th>
+                                <th class="col-md-3 text-right">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,13 +65,13 @@
                             <tr>
                                 <td class="text-center">{{ $product->id }}</td>
                                 <td>{{ $product->name }}</td>
-                                <td>{{ $product->description }}</td>
+                                <td>{{ $product->long_description }}</td>
                                 <!-- operador ? para preguntar por un parametro existe si no muesta 'general' -->
                                 <!-- <td>{{ $product->category ? $product->category->name : 'General' }}</td> -->
 								<td>{{ $product->category_name }}</td>
                                 <td class="text-right">$ {{ $product->price }}</td>
                                 <td class="td-actions text-right">
-                                    <form method="post" action="{{ url('/admin/products/'.$product->id) }}">
+                                    <form method="post" action="{{ url('/admin/products/'.$product->id) }}" class="delete">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
 
@@ -71,9 +84,10 @@
                                         <a href="{{ url('/admin/products/'.$product->id.'/images') }}" rel="tooltip" title="Imágenes del producto" class="btn btn-warning btn-simple btn-xs">
                                             <i class="fa fa-image"></i>
                                         </a>
-                                        <button type="submit" rel="tooltip" title="Eliminar" class="btn btn-danger btn-simple btn-xs">
+                                        <a class='btn btn-danger btn-simple btn-xs' rel="tooltip" title="Eliminar" onclick="Delete('{{ $product -> name }}')"><i class='fa fa-times'></i> </a>
+                                        <!-- <button type="submit" rel="tooltip" title="Eliminar" class="btn btn-danger btn-simple btn-xs">
                                             <i class="fa fa-times"></i>
-                                        </button>
+                                        </button> -->
                                     </form>
                                 </td>
                             </tr>
@@ -81,7 +95,7 @@
                         </tbody>
                     </table>
                     <!-- para mostrar la paginacion hecha en el controlador -->
-                    {{ $products -> links() }}
+                    {{--{{ $products -> links() }}--}}
 				</div>
 			</div>
 
@@ -95,19 +109,66 @@
 @endsection
 
 @section('scripts')
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <!-- <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/js/foundation.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.foundation.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> 
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.1/js/responsive.foundation.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.1/js/responsive.bootstrap4.min.js"></script>
+
+    <script>
+        function Delete( nameProduct ) {
+			$.confirm({
+				theme: 'supervan',
+				title: 'Eliminar Plato',
+				content: 'Seguro(a) que deseas eliminar el Plato ' + nameProduct + '. <br> Click Aceptar or Cancelar',
+				icon: 'fa fa-question-circle',
+				animation: 'scale',
+				animationBounce: 2.5,
+				closeAnimation: 'scale',
+				opacity: 0.5,
+				buttons: {
+					'confirm': {
+						text: 'Aceptar',
+						btnClass: 'btn-blue',
+						action: function () {
+							$.confirm({
+								theme: 'supervan',
+								title: 'Estas Seguro ?',
+								content: 'Una vez eliminado debes volver a crear el plato',
+								icon: 'fa fa-warning',
+								animation: 'scale',
+								animationBounce: 2.5,
+								closeAnimation: 'zoom',
+								buttons: {
+									confirm: {
+										text: 'Si, Estoy Seguro!',
+										btnClass: 'btn-orange',
+										action: function () {
+											$('.delete').submit();
+										}
+									},
+									cancel: {
+										text: 'No, Cancelar',
+										//$.alert('you clicked on <strong>cancel</strong>');
+									}
+								}
+							});
+						}
+					},
+					cancel: {
+						text: 'Cancelar',
+						//$.alert('you clicked on <strong>cancel</strong>');
+					},
+				}
+			});
+		}
+    </script>
     <script>
         $(document).ready(function() {
             $('#tableProducts').DataTable({
                 "language": {
 
-                    "emptyTable": "No hay categorias , click en el boton <b>Nueva Categoria</b> para agregar uno nuevo",
+                    "emptyTable": "No hay productos , click en el boton <b>Nuevo Producto</b> para agregar uno nuevo",
                     "paginate": {
                         "first": "Primero",
                         "last": "Ultimo",
@@ -116,50 +177,14 @@
                     },
                     "search": "Buscar: ",
                     "info": "Mostrando del _START_ al _END_, de un total de _TOTAL_ entradas",
+                    "lengthMenu": "Mostrar _MENU_ Productos por Página",
+                    "zeroRecords": "No se encontro ningun resultado",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
                 },
-                "dom": 'Bfrtip',
-                        "lengthChange": "false",
-                        "lengthMenu": [
-                            [10, 25, 50, -1],
-                            ['10 filas', '25 filas', '50 filas', 'Mostrar Todo']
-                        ],
-                        "buttons": [
-                            {
-                                "extend": "pageLength",
-                                "text": "Mostrar Mas",
-                                "orientation": 'landscape',
-                                "pageSize": 'LEGAL'
-                                //"className": "red"
-                            },
-                            {
-                                "extend": "print",
-                                "text": "<i class='fa fa-print'></i>",
-                                "titleAttr": 'Imprimir',
-                                "orientation": 'landscape',
-                                "pageSize": 'LEGAL'
-                                //"className": "red"
-                            },
-                            {
-                                "extend": 'excelHtml5',
-                                "text": '<i class="fa fa-file-excel-o"></i>',
-                                "titleAttr": 'Convertir Excel',
-                                //"extend": "excel",
-                                //"text": "Convertir Excel",
-                                "orientation": 'landscape',
-                                "pageSize": 'LEGAL'
-                            },
-                            {
-                                "extend": 'pdfHtml5',
-                                "text": '<i class="fa fa-file-pdf-o"></i>',
-                                "titleAttr": 'Convertir PDF',
-                                "orientation": 'landscape',
-                                "pageSize": 'LEGAL'
-                                //"extend": "pdf",
-                                //"text": "Convertir Pdf"
-                                //"className": "red"
-                            }
-                        ]
+                "responsive" : "true",
+                "autoWidth": "true"
             });
-        } );
+        });
     </script>
 @endsection

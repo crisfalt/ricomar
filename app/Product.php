@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
 
+    protected $fillable = ['name', 'long_description', 'price', 'category_id'];
+
     public static $messages = [
         'name.required' => 'El nombre es un campo obligatorio',
         'name.min' => 'El nombre debe tener minimo 3 caracteres',
-        'description.required' => 'La descripción es un campo obligatorio',
-        'description.max' => 'La descripcion debe tener maximo 200 caracteres',
+        'long_description.required' => 'La descripción es un campo obligatorio',
+        'long_description.max' => 'La descripcion debe tener maximo 200 caracteres',
         'price.required' => 'El precio es un campo obligatorio',
         'price.numeric' => 'El precio es un campo de solo numeros',
         'price.min' => 'El precio no debe ser menor de cero'
@@ -19,7 +21,7 @@ class Product extends Model
 
     public static $rules = [
             'name' => 'required|min:3',
-            'description' => 'required|max:200',
+            'long_description' => 'required|max:200',
             'price' => 'required|numeric|min:0'
     ];
 

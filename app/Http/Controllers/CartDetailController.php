@@ -23,26 +23,41 @@ class CartDetailController extends Controller
         $cartDetail -> quantity = $request -> quantity;
         $bomb = $request -> input('bomb');
         $patacon = $request -> input('patacon');
+        $observationIn = $request -> input('observation');
         $observation = "";
         if( $bomb != null ) $observation = $bomb; 
         if( $patacon != null ) $observation = $patacon;
+        if( $observationIn != null ) $observation = $observationIn;
         if( ( $patacon != null ) && ( $bomb != null ) ) $observation = $bomb.";".$patacon;
+        if( ( $patacon != null ) && ( $observationIn != null ) ) $observation = $patacon.";".$observationIn;
+        if( ( $bomb != null ) && ( $observationIn != null ) ) $observation = $bomb.";".$observationIn;
+        if( ( $patacon != null ) && ( $bomb != null ) && ( $observationIn != null ) ) $observation = $bomb.";".$patacon.";".$observationIn;
         $cartDetail -> observation = $observation;
         if( auth() -> check() ) {
             $cartDetail -> cart_id = auth() -> user() -> cart -> id;
             $cartDetail -> save();
         }
         else {
-            if( !( \Cache::has('detailsTemp') ) ) {
+            if( !($request->session()->has('detailsTemp') ) ) {
                 $arrayToSave = array();
                 array_push( $arrayToSave , $cartDetail );
-                \Cache::put('detailsTemp', $arrayToSave , 20); //creo en cache la variable por 20 minutos
+                $request->session()->put('detailsTemp', $arrayToSave );
             }
             else {
-                $arraySave = \Cache::get('detailsTemp');
+                $arraySave = $request->session()->get('detailsTemp');
                 array_push( $arraySave , $cartDetail );
-                \Cache::put('detailsTemp', $arraySave , 20); //creo en cache la variable por 20 minutos
+                $request->session()->put('detailsTemp', $arraySave );
             }
+            // if( !( \Cache::has('detailsTemp') ) ) {
+            //     $arrayToSave = array();
+            //     array_push( $arrayToSave , $cartDetail );
+            //     \Cache::put('detailsTemp', $arrayToSave , 20); //creo en cache la variable por 20 minutos
+            // }
+            // else {
+            //     $arraySave = \Cache::get('detailsTemp');
+            //     array_push( $arraySave , $cartDetail );
+            //     \Cache::put('detailsTemp', $arraySave , 20); //creo en cache la variable por 20 minutos
+            // }
             // $arraySave = \Cache::get('detailsTemp');
             // foreach( $arraySave as $safety ) {
             //     dd( $safety -> product_id );
@@ -52,10 +67,10 @@ class CartDetailController extends Controller
         return back() -> with( compact('notification') );
     }
 
-    //eliminar el producto del carrito de compras
-    public function destroy( Request $request ) {
+    //eliminar el producto del carrito de compras tradiccional
+    public function destroy( Request $request) {
         $notification = ''; //variable para devolver una notificacion a la vista
-        $id_cart_detail = $request -> cart_detail_id;//obtengo la id del detalle a eliminar
+        $id_cart_detail = $request -> cart_detail_id ;//obtengo la id del detalle a eliminar
         //dd($id_cart_detail);
         if( auth() -> check() ) {
             $cartDetail = CartDetail::find( $id_cart_detail ); //lo busco en la tabla
@@ -69,9 +84,40 @@ class CartDetailController extends Controller
             }
         }
         else {
-            $detallesCache = \Cache::get('detailsTemp');
+            // $detallesCache = \Cache::get('detailsTemp');
+            // unset($detallesCache[ $id_cart_detail ] ); //eilimino el producto de la cache
+            // \Cache::put('detailsTemp', $detallesCache , 20); //meto el array a la cache pero el prodcuto eliminado
+            // $notification = 'El producto se ha eliminado de la orden Correctamente';
+            $detallesCache = $request->session()->get('detailsTemp');
             unset($detallesCache[ $id_cart_detail ] ); //eilimino el producto de la cache
-            \Cache::put('detailsTemp', $detallesCache , 20); //meto el array a la cache pero el prodcuto eliminado
+            $request -> session() -> put('detailsTemp', $detallesCache); //meto el array a la cache pero el prodcuto eliminado
+            $notification = 'El producto se ha eliminado de la orden Correctamente';
+        }
+
+        return back() -> with( compact('notification') );
+    }
+
+    //eliminar el producto del carrito de compras con jquery-confimr
+    public function destroyPlato( Request $request , $idDelete ) {
+        dd($idDelete);
+        $notification = ''; //variable para devolver una notificacion a la vista
+        $id_cart_detail = $idDelete;//obtengo la id del detalle a eliminar
+        //dd($id_cart_detail);
+        if( auth() -> check() ) {
+            $cartDetail = CartDetail::find( $id_cart_detail ); //lo busco en la tabla
+            //pregunto si el detalle pertenece al carrito de compras del usuario logueado
+            if( $cartDetail -> cart_id == auth() -> user() -> cart -> id ) {
+                $cartDetail -> delete(); //elimino
+                $notification = 'El producto se ha eliminado de la orden Correctamente';
+            }
+            else {
+                $notification = 'El producto no se puede eliminar de la orden';
+            }
+        }
+        else {
+            $detallesCache = $request->session()->get('detailsTemp');
+            unset($detallesCache[ $id_cart_detail ] ); //eilimino el producto de la cache
+            $request -> session() -> put('detailsTemp', $detallesCache); //meto el array a la cache pero el prodcuto eliminado
             $notification = 'El producto se ha eliminado de la orden Correctamente';
         }
 

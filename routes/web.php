@@ -28,7 +28,8 @@ Route::get('/products/{id}','ProductController@show'); //mostrar el producto
 Route::get('/categories/{category}','CategoryController@show'); //mostrar categorias
 Route::post('/cart','CartDetailController@store'); //carrito de usuarios 
 //Route::post('/cartguest','CartDetailController@storeguest'); //carrit de invitados
-Route::delete('/cart','CartDetailController@destroy');
+Route::delete('/cart','CartDetailController@destroy');//eliminar producto del carrito tradiccional
+// Route::post('/cart/id','CartDetailController@destroyPlato');//eliminar producto del carrito con jequery-confirm
 //para redirigi al registro desde el formulario principal con nombre y correo
 // Route::get('/registerinput' , 'RegisterController@showRegistrationForm');
 

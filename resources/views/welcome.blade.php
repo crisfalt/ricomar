@@ -2,8 +2,6 @@
 
 @section('title','Bienvenido a ' . config( 'app.name' ) )
 
-@section('body-class','landing-page')
-
 <!-- crear estislo solo para una pagina -->
 @section('styles')
     <style media="screen">
@@ -70,6 +68,15 @@
 		    width: 250px;
         }
 
+        .font-description {
+            font-size : 1.2em;
+        }
+
+        .font-bold {
+            font-weight: bold; 
+            font-style: bold;
+        }
+
         .rounded {
 			height: 180px;
 			width: 300px;
@@ -80,7 +87,28 @@
 			border-radius: 50%;
 			background-size:cover;
 		}
+
+        /* *{
+            margin:0;
+        } */
+
+        #fixed {
+            
+            left: calc( 100% - 54px );
+            top: cacl(100% - 10px );;
+            color : red;
+            font-size: 30px;
+            position: fixed;
+
+        }
+
     </style>
+@endsection
+
+@section('body-class','landing-page')
+
+@section('cartFixed')
+<a href="{{ url('/home') }}"><i id="fixed" class="material-icons">shopping_cart</i></a>
 @endsection
 
 @section('content')
@@ -90,8 +118,11 @@
 			<div class="col-md-6">
 				<h1 class="title">Bienvenido a {{ config( 'app.name' ) }}</h1>
                 <h3>Realiza tus pedidos en linea y te contactaremos para coordinar la entrega </h3>
+                <p class="font-description font-bold">Atendemos Domicilios en Horario De :</p>
+                <p class="font-description font-bold">Lunes a Sabados de 10:00 AM a 08:00 PM</p>
+                <p class="font-description font-bold">Domingos y Festivos de 04:00 PM a 08:00 PM</p>
                 <br />
-                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn btn-danger btn-raised btn-lg">
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn btn-danger btn-raised btn-lg">
 					<i class="fa fa-play"></i> Como Funciona?
 				</a>
 			</div>
@@ -100,9 +131,12 @@
 </div>
 
 <div class="main main-raised">
-	<div class="container">
+	<div class="container">   
     	<div class="section text-center">
-            <h2 class="title">Visita Nuestras Categorías</h2>
+            <div class="row">
+                <div class="col-md-3 col-xs-3"><img src="{{ asset('img/logo2.png') }}" class="img-responsive" height="250px" width="250px" /></div>
+                <div class="col-md-6 col-xs-7"><h2 class="title">Visita Nuestras Categorías</h2></div>
+            </div>
             <form class="form-inline" action="{{ url('/search') }}" method="get">
                 <input type="text" id="search" name="search" value="" placeholder="¿Que producto buscas?" class="form-control">
                 <button class="btn btn-primary btn-just-icon" type="submit">
@@ -123,7 +157,7 @@
 	                        <h4 class="title">
                                 <a href="{{ url('/categories/'.$category -> id) }}">{{ $category -> name }} </a><br />
 							           </h4>
-	                        <p class="description">{{ $category->description }}</p>
+	                        <p class="description font-description">{{ $category->description }}</p>
 	                    </div>
 	                </div>
                     @endforeach
@@ -147,7 +181,7 @@
       								<i class="material-icons">chat</i>
       							</div>
       							<h4 class="info-title">Atendemos tus dudas</h4>
-      							<p>Atendemos rápidamente cualquier consulta que tengas vía chat. No estás sólo, sino que siempre estamos atentos a tus inquietudes.</p>
+      							<p class="font-description">Atendemos rápidamente cualquier consulta que tengas vía chat. No estás sólo, sino que siempre estamos atentos a tus inquietudes.</p>
       						</div>
                           </div>
                           <div class="col-md-4">
@@ -156,7 +190,7 @@
       								<i class="material-icons">verified_user</i>
       							</div>
       							<h4 class="info-title">Pago seguro</h4>
-      							<p>Todo pedido que realices será confirmado a través de una llamada. Si no confías en los pagos en línea puedes pagar contra entrega el valor acordado.</p>
+      							<p class="font-description">Todo pedido que realices será confirmado a través de una llamada. Si no confías en los pagos en línea puedes pagar contra entrega el valor acordado.</p>
       						</div>
                           </div>
                           <div class="col-md-4">
@@ -165,7 +199,7 @@
       								<i class="material-icons">fingerprint</i>
       							</div>
       							<h4 class="info-title">Información privada</h4>
-      							<p>Los pedidos que realices sólo los conocerás tú a través de tu panel de usuario. Nadie más tiene acceso a esta información.</p>
+      							<p class="font-description">Los pedidos que realices sólo los conocerás tú a través de tu panel de usuario. Nadie más tiene acceso a esta información.</p>
       						</div>
                           </div>
                       </div>
@@ -240,30 +274,3 @@
         });
     </script>
 @endsection
-<!-- @section('scripts')
-    <script src="{{ asset('/js/typeahead.bundle.min.js') }}"></script>
-    <script>
-        $(function() {
-
-            // constructs the suggestion engine
-            var products = new Bloodhound({
-              datumTokenizer: Bloodhound.tokenizers.whitespace,
-              queryTokenizer: Bloodhound.tokenizers.whitespace,
-              // `states` is an array of state names defined in "The Basics"
-              // local: ['hola','hola2','prueba','prueba2','prueba3']
-              prefetch : '{{ url( "/products/json" ) }}'
-            });
-            //inicializar typeahead para busqueda predictiva
-            $('#search').typeahead({
-                hint: true,
-                highlight: true, //la palabra que vaya coincidiendo alumbre
-                minLength: 1 //suegerencias de palabras a partir de 1 caracter
-            },
-            {
-                name: 'products',
-                source: products
-            });
-        });
-    </script>
-@endsection
- -->

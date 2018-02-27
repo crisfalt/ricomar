@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/logo2.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
     <title>@yield('title', config('app.name'))</title>
@@ -11,19 +11,23 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 
     <!--     Fonts and icons     -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" />
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" /> -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+     
 
     <!-- CSS Files -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/material-kit.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery-confirm.css') }}" />
     @yield('styles')
 </head>
 
 <body class="@yield('body-class')">
     <nav class="navbar navbar-transparent navbar-absolute">
         <div class="container">
+       
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example">
@@ -32,9 +36,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ url('/') }}">{{ config( 'app.name' ) }}</a>
+                <!-- <a class="navbar-brand" href="{{ url('/') }}">{{ config( 'app.name' ) }}</a> -->
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    <img src="{{ asset('img/logo_1.png') }}" class="img-responsive" height="150px" width="170px" />
+                </a>
             </div>
-
+     
             <div class="collapse navbar-collapse" id="navigation-example">
                 <ul class="nav navbar-nav navbar-right">
                     @guest
@@ -72,32 +79,24 @@
                             </ul>
                         </li>
                     @endguest
-                    <!-- <li>
-                       <a href="https://twitter.com/CreativeTim" target="_blank" class="btn btn-simple btn-white btn-just-icon">
-                           <i class="fa fa-twitter"></i>
-                       </a>
-                   </li> -->
                    <li>
                        <a href="https://www.facebook.com/CevicheriaYRestauranteRicoMar/" target="_blank" class="btn btn-simple btn-white btn-just-icon">
                            <i class="fa fa-facebook-square"></i>
                        </a>
                    </li>
-                   <li>
-                        <a href="{{ url('/home') }}"><i class="material-icons">shopping_cart</i></a>
-                    </li>
-<!--                    <li>
-                       <a href="https://www.instagram.com/CreativeTimOfficial" target="_blank" class="btn btn-simple btn-white btn-just-icon">
-                           <i class="fa fa-instagram"></i>
-                       </a>
-                   </li> -->
                 </ul>
+                
             </div>
         </div>
+        @yield('cartFixed')
     </nav>
 
-    <div class="wrapper">
+    <div class="wrapper">    
         @yield('content')
+        
     </div>
+
+    
 </body>
 
     <!--   Core JS Files   -->
@@ -113,6 +112,7 @@
 
     <!-- Control Center for Material Kit: activating the ripples, parallax effects, scripts from the example pages etc -->
     <script src="{{ asset('/js/material-kit.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/js/jquery-confirm.js') }}" type="text/javascript"></script>
     @yield('scripts')
 
 </html>

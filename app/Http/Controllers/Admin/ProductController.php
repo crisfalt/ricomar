@@ -13,7 +13,7 @@ class ProductController extends Controller
     private $categories;
     //
     public function index() {
-        $products = Product::orderBy('id' , 'DESC') -> paginate(10); //para paginar los productos de 15 en 15
+        $products = Product::orderBy('id' , 'DESC') -> get(); //para paginar los productos de 15 en 15
         return view('admin.products.index')->with(compact('products')); //listado de productos
     }
 
@@ -32,7 +32,7 @@ class ProductController extends Controller
         //crear un prodcuto nuevo
         $product = new Product();
         $product -> name = $request->input('name');
-        $product -> description = $request->input('description');
+        //$product -> description = $request->input('description');
         $product -> price = $request->input('price');
         $product -> long_description = $request->input('long_description');
         $product -> category_id = $request -> input( 'category_id' );
@@ -58,7 +58,7 @@ class ProductController extends Controller
         //crear producto para actualizar buscandolo por su id
         $product = Product::find( $id );
         $product -> name = $request->input('name');
-        $product -> description = $request->input('description');
+        //$product -> description = $request->input('description');
         $product -> price = $request->input('price');
         $product -> long_description = $request->input('long_description');
         $product -> category_id = $request -> input( 'category_id' );

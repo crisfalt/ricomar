@@ -76,10 +76,38 @@
 			border-radius: 50%;
 			background-size:cover;
 		}
+
+		.cout-size {
+            height: 160px;
+			width: 300px;
+        }
+
+		.font-description {
+            font-size : 1.2em;
+        }
+
+		*{
+            margin:0;
+        }
+
+        #fixed {
+            
+            left: calc( 100% - 54px );
+            top: cacl(100% - 10px );;
+            color : red;
+            font-size: 30px;
+            position: fixed;
+
+        }
+
 	</style>
 @endsection
 
 @section('body-class','profile-page')
+
+@section('cartFixed')
+<a href="{{ url('/home') }}" class=""><i id="fixed" class="material-icons">shopping_cart</i></a>
+@endsection
 
 @section('content')
 <div class="header header-filter" style="background-image: url('{{ asset('img/fondo2.jpg') }}');"></div>
@@ -90,7 +118,7 @@
             <div class="row">
                 <div class="profile">
                     <div class="avatar">
-                        <img src="/images/categories/{{ $category -> image }}" alt="No se encontro" class="img-raised rounded">
+                        <img src="/images/categories/{{ $category -> image }}" alt="No se encontro" class="img cout-size">
                     </div>
                     <div class="name">
                         <h3 class="title">{{ $category -> name }}</h3>
@@ -98,7 +126,7 @@
                 </div>
             </div>
             <div class="description text-center">
-                <p>{{ $category -> description }}</p>
+                <p class="font-description">{{ $category -> description }}</p>
             </div>
 			@if (session('notification'))
 				<div class="alert alert-success">
@@ -123,11 +151,11 @@
     					<div class="col-md-4 col-xs-12 text-center">
     	                    <div class="team-player">
                                 <!-- featured_image_url , path creada en el modelo product::getFeaturedImageUrlAttribute -->
-    	                        <a href="{{ url('/products/'.$product -> id) }}"><img src="{{ $product -> featured_image_url }}" alt="Thumbnail Image" class="img-raised rounded"></a>
+    	                        <a href="{{ url('/products/'.$product -> id) }}"><img src="{{ $product -> featured_image_url }}" alt="Thumbnail Image" class="img cout-size"></a>
     	                        <h4 class="title">
                                     <a href="{{ url('/products/'.$product -> id) }}">{{ $product -> name }} </a><br />
     							</h4>
-    	                        <p class="description">{{ $product->description }}</p>
+    	                        <p class="description font-description">{{ $product->long_description }}</p>
 								<h4 class="title">
                                     $ {{ $product -> price }}
     							</h4>
